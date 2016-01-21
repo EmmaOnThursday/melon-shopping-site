@@ -11,6 +11,7 @@ from flask import Flask, render_template, redirect, flash, session, request
 import jinja2
 
 import melons
+import customers
 
 
 app = Flask(__name__)
@@ -162,8 +163,22 @@ def process_login():
     """
 
     # TODO: Need to implement this!
+    user_email =  request.form.get('email')
+    user_pw = request.form.get('password')
+    try:
+        user = customers.get_by_email(user_email)
+        if user_pw == user.password:
+            # log them in
+            flash("You are logged in.")
+            # redirect to /melons
+        else:
+            flash("Incorrect password.")
+            #redirect to login page
+    except KeyError:
+        flash("User not found! Please create account.")
+    
 
-    return "Oops! This needs to be implemented"
+    # return "Oops! This needs to be implemented"
 
 
 @app.route("/checkout")
