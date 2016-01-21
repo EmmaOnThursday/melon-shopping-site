@@ -18,8 +18,8 @@
         <tr>            
             <td>{{cart[id]['name']}}</td>
             <td>{{cart[id]['quantity']}}</td>
-            <td>{{cart[id]['price']}}</td>
-            <td>{{cart[id]['total']}}</td>
+            <td>{{"${:.2f}".format(cart[id]['price'])}}</td>
+            <td>{{"${:.2f}".format(cart[id]['total'])}}</td>
         </tr>
             {% endfor %}
 
@@ -51,7 +51,7 @@
         </tbody>
     </table>
 
-    <h3>Total: something</h3>
+    <h3>Total: {{"${:.2f}".format(super_total)}}</h3>
 
     <a href="/checkout" class="btn btn-large btn-primary">Check Out</a>
 

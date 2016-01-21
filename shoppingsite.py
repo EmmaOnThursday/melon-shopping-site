@@ -84,6 +84,8 @@ def shopping_cart():
 
     melons_in_cart = {}
 
+
+
     for item in session['cart']:
         if item in melons_in_cart.keys():
             melons_in_cart[item]['quantity'] += 1
@@ -97,11 +99,16 @@ def shopping_cart():
         melons_in_cart[item]['total'] = (melons_in_cart[item]['price'] *
                                         melons_in_cart[item]['quantity'])
 
-    print "*** THIS IS OUR CART ****", melons_in_cart
+    super_total = 0
+    for item in melons_in_cart.keys():
+        super_total += melons_in_cart[item]['total']
+
+    # print "*** THIS IS OUR CART ****", melons_in_cart
 
 
 
-    return render_template("cart.html", cart = melons_in_cart)
+    return render_template("cart.html", cart = melons_in_cart, 
+                            super_total = super_total)
 
 
 @app.route("/add_to_cart/<int:id>")
