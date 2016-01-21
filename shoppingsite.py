@@ -71,23 +71,37 @@ def shopping_cart():
     #   - keep track of the total amt of the entire order
     # - hand to the template the total order cost and the list of melon types
 
+    # FIRST VERSION
+    # melons_only.pop('_flash')
+    # melons_only = session.keys()
+    # cart = {}    
+    # for i in melons_only:
+    #     print "this is i:", session[i], i
+    #     melon_quantity = session[i]
+    #     melon_name = this_melon.common_name
+    #     melon_price = this_melon.price
+    #     melon_total = melon_price * melon_quantity
 
-    melons_only = session.keys()
-    melons_only.pop('_flash')
-    
+    melons_in_cart = {}
 
-    cart = {}    
+    for item in session['cart']:
+        if item in melons_in_cart.keys():
+            melons_in_cart[item]['quantity'] += 1
+        else:
+            this_melon = melons.get_by_id(item)
+            melons_in_cart.setdefault(item, {})
+            melons_in_cart[item].setdefault('quantity', 1)
+            melons_in_cart[item]['name'] = this_melon.common_name
+            melons_in_cart[item]['price'] = this_melon.price
+        
+        melons_in_cart[item]['total'] = (melons_in_cart[item]['price'] *
+                                        melons_in_cart[item]['quantity'])
 
-    for i in melons_only:
-        print "this is i:", session[i], i
-        melon_quantity = session[i]
-        melon_name = this_melon.common_name
-        melon_price = this_melon.price
-        melon_total = melon_price * melon_quantity
+    print "*** THIS IS OUR CART ****", melons_in_cart
 
 
 
-    return render_template("cart.html", cart_total = super_total)
+    return render_template("cart.html", cart = melons_in_cart)
 
 
 @app.route("/add_to_cart/<int:id>")
@@ -104,11 +118,16 @@ def add_to_cart(id):
     #
     # - add the id of the melon they bought to the cart in the session
 
+    if 'cart' not in session:
+        session['cart'] = []
+    
+    session['cart'].append(id)
 
-    if session.get(id, 0) == 0:
-        session[id] = 1
-    else:
-        session[id]+= 1
+    # FIRST VERSION
+    # if session.get(id, 0) == 0:
+    #     session[id] = 1
+    # else:
+    #     session[id]+= 1
         
 
     # print session
